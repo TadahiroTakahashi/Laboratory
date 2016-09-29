@@ -11,6 +11,10 @@ class recieverWidget(QtGui.QWidget):
         self.reactor = reactor
         self.setupLayout()
         self.connect()
+        self.parameterList_valueWanted = []
+    
+    def set_parametersList_valueWanted(self, *tuples):  # tuples= (collection, parameter)
+        self.parameterList_valueWanted = tuples
 
     def setupLayout(self):
         #setup the layout and make all the widgets
@@ -42,7 +46,11 @@ class recieverWidget(QtGui.QWidget):
     def displaySignal(self, cntx, signal):
         self.textedit.append(signal[0])
         self.textedit.append(signal[1])
+        if (signal[0], signal[1]) in parameterList_valueWanted:
+            data = self.server.get_parameter(signal[0], signal[1])
+            self.textedit.append(data)
 
+    
     def closeEvent(self, x):
         #stop the reactor when closing the widget
         self.reactor.stop()
@@ -54,5 +62,6 @@ if __name__=="__main__":
     qt4reactor.install()
     from twisted.internet import reactor
     widget = recieverWidget(reactor)
+    widget.set_parametersList_valueWanted(('test', 'test'))
     widget.show()
     reactor.run()
