@@ -57,6 +57,9 @@ class data_from_MDO4104(object):
         self.preamble = preamble
         self.data = data
 
+    def fittingData(self):
+        
+
 
 def main():
     argv = get_argv()
