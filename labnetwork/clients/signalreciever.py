@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 from twisted.internet.defer import inlineCallbacks
-from PyQt4 import QtGui
+from pyqtgraph.Qt import QtGui, QtCore
+import numpy as np
+import pyqtgraph as pg
 
 class recieverWidget(QtGui.QWidget):
 
@@ -24,6 +27,7 @@ class recieverWidget(QtGui.QWidget):
         #create the text widget 
         self.textedit = QtGui.QTextEdit()
         self.textedit.setReadOnly(True)
+        layout.setGeometry((100,200,100,200))
         layout.addWidget(self.textedit)
         self.setLayout(layout)
 
@@ -43,12 +47,16 @@ class recieverWidget(QtGui.QWidget):
         #slot (function) from the client to the signal emitted from the server
         #In this case self.displaySignal
 
+    @inlineCallbacks
     def displaySignal(self, cntx, signal):
         self.textedit.append(signal[0])
         self.textedit.append(signal[1])
-        if (signal[0], signal[1]) in parameterList_valueWanted:
-            data = self.server.get_parameter(signal[0], signal[1])
-            self.textedit.append(data)
+        print self.server
+        if (signal[0], signal[1]) in self.parameterList_valueWanted:
+            print signal[0], signal[1]
+            data  = yield self.server.get_parameter(signal[0], signal[1])
+            print data
+            self.textedit.append(str(data))
 
     
     def closeEvent(self, x):
