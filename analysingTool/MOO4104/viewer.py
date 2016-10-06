@@ -4,18 +4,16 @@ import sys
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ptick
 import commands
-import scipy.optimize as opt
-from lmfit import minimize, Parameters, Parameter, report_fit, fit_report
 import seaborn as sns
+import os
 sns.set_style("whitegrid")
-
-def get_argv():
-    return sys.argv
+argv = sys.argv
 
 ### information of input data required###
 class data_from_MDO4104(object):
     def __init__(self, argv):
-        self.directory = "../20161005/"
+        ## in future, directory etc should be set by new function.
+        self.directory = "/Users/tadahiro/Documents/data/20161005/"
         self.filetype = argv[1]
         self.priminal_parameter = argv[2]
         self.filename = str(self.directory) + str(self.filetype)
@@ -29,7 +27,7 @@ class data_from_MDO4104(object):
         self.plotter = True
 
 
-    def assigningData(self, data):
+    def assigningData(self):
         assign_array = self.assign_array
         data_dict = {}
         for num, name in enumerate(assign_array):
@@ -56,13 +54,10 @@ class data_from_MDO4104(object):
 
         self.preamble = preamble
         self.data = data
-
-    def fittingData(self):
         
 
 
 def main():
-    argv = get_argv()
     raw_data = data_from_MDO4104(argv)
     # reading data
     raw_data.readingFile()
